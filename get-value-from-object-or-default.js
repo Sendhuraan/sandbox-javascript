@@ -6,7 +6,7 @@ const { fromMaybe } = S;
 
 // Get specified key from object or else set default value. Similar to R.propOr
 const props = {
-		data: {
+	data: {
 		latitude: 73.56986,
 		longitude: -43.986
 	}
