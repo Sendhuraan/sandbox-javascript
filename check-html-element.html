@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<title>Check HTML Element</title>
+</head>
+<body>
+
+<!-- <div id="address"></div> -->
+<input id="address" /> 
+
+<script src="./node_modules/rxjs/dist/bundles/rxjs.umd.min.js"></script>
+<script src="https://cdn.jsdelivr.net/gh/sanctuary-js/sanctuary@3.1.0/dist/bundle.js"></script>
+<script>
+const S = sanctuary;
+const $ = sanctuaryDef;
+const { fromEvent, map } = rxjs;
+
+const addressEl = document.getElementById('address');
+console.log(addressEl);
+const HTMLInputEmpty = () => {
+	const emptyInput = document.createElement('input');
+	emptyInput.setAttribute('type', 'hidden');
+	emptyInput.setAttribute('value', '');
+	return emptyInput;
+}
+const isHtmlElement = el => {
+	S.is ($.HtmlElement) (el) ? S.Just(el) : S.Nothing;
+}
+const isElementHasType = S.get (S.is ($.String)) ('type');
+
+const isInputElement = S.pipe([
+	S.get (S.is ($.String)) ('tagName'),
+	S.map (S.equals ('INPUT'))
+])(addressEl)
+
+const isInputText = S.pipe([
+	S.get (S.is ($.String)) ('type'),
+	S.map (S.equals ('text'))
+])(addressEl)
+
+const addressInput = S.sequence (S.Maybe) ([isInputElement, isInputText]);
+// const isInputText = isHtmlElement (addressEl)
+
+const validateElement = el => {
+	/*
+	if el is HTML Element
+	if el has type attribute
+	if el type attribute is 'text'
+	*/
+}
+
+console.log(S.show (addressInput));
+
+const validatedAddressInput = S.fromMaybe (false) (addressInput);
+console.log(validatedAddressInput);
+
+fromEvent(validatedAddressInput, 'keyup')
+.pipe(
+	map(e => e.target.value)
+)
+.subscribe(
+	(value) => {
+		console.log(value);
+	}
+)
+</script>
+	
+</body>
+</html>
