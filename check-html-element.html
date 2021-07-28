@@ -18,43 +18,32 @@ const $ = sanctuaryDef;
 const { fromEvent, map } = rxjs;
 
 const addressEl = document.getElementById('address');
-console.log(addressEl);
+
 const HTMLInputEmpty = () => {
 	const emptyInput = document.createElement('input');
 	emptyInput.setAttribute('type', 'hidden');
 	emptyInput.setAttribute('value', '');
 	return emptyInput;
 }
-const isHtmlElement = el => {
-	S.is ($.HtmlElement) (el) ? S.Just(el) : S.Nothing;
-}
-const isElementHasType = S.get (S.is ($.String)) ('type');
 
 const isInputElement = S.pipe([
 	S.get (S.is ($.String)) ('tagName'),
-	S.map (S.equals ('INPUT'))
-])(addressEl)
+	S.map (S.equals ('INPUT')),
+	S.fromMaybe (false)
+])
 
 const isInputText = S.pipe([
 	S.get (S.is ($.String)) ('type'),
-	S.map (S.equals ('text'))
-])(addressEl)
+	S.map (S.equals ('text')),
+	S.fromMaybe (false)
+])
 
-const addressInput = S.sequence (S.Maybe) ([isInputElement, isInputText]);
-// const isInputText = isHtmlElement (addressEl)
+const getAddressInput = element => S.and (isInputElement(element)) (isInputText(element))
+	? S.Just(element)
+	: S.Nothing
 
-const validateElement = el => {
-	/*
-	if el is HTML Element
-	if el has type attribute
-	if el type attribute is 'text'
-	*/
-}
-
-console.log(S.show (addressInput));
-
-const validatedAddressInput = S.fromMaybe (false) (addressInput);
-console.log(validatedAddressInput);
+const addressInput = getAddressInput(addressEl);
+const validatedAddressInput = S.fromMaybe (HTMLInputEmpty()) (addressInput);
 
 fromEvent(validatedAddressInput, 'keyup')
 .pipe(
