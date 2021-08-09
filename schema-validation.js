@@ -1,5 +1,4 @@
-import { of, from, mergeMap, catchError } from 'rxjs';
-import { fromEither } from 'sanctuary';
+import { of, from, mergeMap } from 'rxjs';
 import * as yup from 'yup'
 
 const yupConfig = {
