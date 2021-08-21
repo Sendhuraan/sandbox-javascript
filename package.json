@@ -9,6 +9,9 @@
   "author": "Sendhuraan NKK",
   "license": "ISC",
   "dependencies": {
+    "fluture": "^14.0.0",
+    "fluture-sanctuary-types": "^7.1.0",
+    "node-fetch": "^2.6.1",
     "ramda": "^0.27.1",
     "rxjs": "^7.2.0",
     "sanctuary": "^3.1.0",
